@@ -1,0 +1,294 @@
+#include <Windows.h>
+#include <GL\glew.h>
+#include <GL\freeglut.h>
+#include <iostream>
+using namespace std;
+void changeView(int w, int h)
+{
+
+	
+
+glViewport(0, 0, w, h);
+}
+void myinit(void)
+{
+
+	
+
+glClearColor(1.0, 1.0, 1.0, 0.0);
+
+	
+
+glMatrixMode(GL_PROJECTION);
+
+	
+
+gluOrtho2D(0.0, 640.0, 0.0, 480.0);
+}
+void setPixel(GLint x, GLint y){
+
+	
+
+glBegin(GL_POINTS);
+
+	
+
+glColor3f(1, 0, 0);
+
+	
+
+glVertex2i(x, y);
+
+	
+
+glEnd();
+
+	
+
+glFlush();
+}
+
+void render(){	
+
+glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+float x1 = 50, y1 = 50, x2 = 300, y2 = 400;
+
+	
+float dy = y2 - y1;
+
+float dx = x2 - x1;
+
+float p0 = 2*dy-dx;
+
+float p1;
+
+
+glPointSize(10);
+
+
+glBegin(GL_POINTS);
+
+
+glColor3f(0, 0, 1);	
+
+glVertex2i(x1, y1);	
+
+glEnd();	
+
+float x = x1, y = y1;
+
+for(int k=0;k<dx;k++){
+
+	if(p0 <= 0){
+		x=x+1;
+		p1= p0+ 2*dy;
+		setPixel(x,y);
+		p0=p1;
+	}else{
+		y=y+1;
+		x=x+1;
+		p1=p0+2*(dy-dx);
+		setPixel(x,y);
+		p0=p1;
+	}
+}
+
+	
+
+glutSwapBuffers();
+
+	
+
+
+}
+
+void display(){
+
+	
+
+glClear(GL_COLOR_BUFFER_BIT);
+
+	
+
+render();
+
+	
+
+glFlush();
+}
+int main(int argc, char* argv[]){
+
+	
+
+glutInit(&argc, argv);  // Initialize glut
+
+	
+
+//create memory buffers to display
+
+	
+
+glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+
+	
+
+glutInitWindowSize(800, 600); // window size
+
+	
+
+glutCreateWindow("Flag");  // create window
+
+	
+
+glutReshapeFunc(changeView);
+
+	
+
+//glutDisplayFunc(render);
+
+
+glutDisplayFunc(display);//links the display event with the display event handler(display)
+
+
+myinit();
+
+glutIdleFunc(render);
+
+
+GLenum error = glewInit();	
+
+if (GLEW_OK != error){
+
+
+fprintf(stderr, "Glew error");
+	
+
+return 1;
+	
+
+}
+
+glutMainLoop();
+
+	
+
+return 0;
+}
+
+
+
+
+
+
+
+3)Indian Flag
+
+
+
+#include <Windows.h>
+#include <GL\glew.h>
+#include <GL\freeglut.h>
+#include <iostream>
+using namespace std;
+void changeView(int w, int h)
+{	
+glViewport(0, 0, w, h);
+}
+
+void render(){
+glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+glBegin(GL_POLYGON);
+glColor3f(1, 0.5, 0);
+
+glVertex3f(-1, 1, 0);	
+
+glVertex3f(1, 1, 0);
+glVertex3f(1, 1.0f / 3.0f, 0);
+glVertex3f(-1, 1.0f / 3.0f, 0);
+glEnd();
+glBegin(GL_POLYGON);
+glColor3f(1, 1, 1);
+glVertex3f(-1, 1.0f / 3.0f, 0);
+
+glVertex3f(1, 1.0f / 3.0f, 0);
+glVertex3f(1, -1.0f / 3.0f, 0);
+glVertex3f(-1, -1.0f / 3.0f, 0);
+glEnd();
+glBegin(GL_POLYGON);
+glColor3f(0, 1, 0);
+glVertex3f(-1, -1.0f / 3.0f, 0);
+glVertex3f(1, -1.0f / 3.0f, 0);
+glVertex3f(1, -1, 0);
+glVertex3f(-1, -1, 0);
+glEnd();
+float cx = 0.0f, cy = 0.0f, r = 1.0f / 3.0f;
+int num_of_seg = 100;
+glBegin(GL_LINE_LOOP);
+glColor3f(0, 0, 1);
+for (int i = 0; i < num_of_seg; i++){
+float theta = 2.0f*3.1415926f*float(i) / float(num_of_seg);
+float x = r * cos(theta);
+float y = r * sin(theta);
+glVertex2f(x + cx, y + cy);
+}	
+
+glEnd();
+
+float angle = 0.0f;
+
+float x1 = 0.0f, y1 = 0.0f;	
+
+float x2, y2;	
+
+glColor3f(0, 0, 1);
+glBegin(GL_LINE_LOOP);	
+
+while (angle < 360.0f){
+
+x2 = 1.0f / 3.0f * cos(angle);	
+
+y2 = 1.0f / 3.0f * sin(angle);
+
+glVertex3f(x1, y1, 0);
+
+glVertex3f(x2, y2, 0);
+angle += 15.0f;
+
+}
+glEnd();
+glutSwapBuffers();
+}
+int main(int argc, char* argv[]){
+glutInit(&argc, argv);  // Initialize glut
+
+//create memory buffers to display
+glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+
+glutInitWindowSize(800, 600); // window size
+
+
+glutCreateWindow("Flag");  // create window	
+
+glutReshapeFunc(changeView);
+
+glutDisplayFunc(render);
+
+
+GLenum error = glewInit();
+
+
+if (GLEW_OK != error){
+
+fprintf(stderr, "Glew error");
+
+return 1;
+}
+
+glutMainLoop();
+
+	
+
+return 0;
+}

@@ -1,0 +1,251 @@
+
+//2) DDA
+
+
+
+#include <Windows.h>
+#include <GL\glew.h>
+#include <GL\freeglut.h>
+#include <iostream>
+using namespace std;
+void changeView(int w, int h)
+{
+
+	
+
+glViewport(0, 0, w, h);
+}
+void myinit(void)
+{
+
+	
+
+glClearColor(1.0, 1.0, 1.0, 0.0);
+
+	
+
+glMatrixMode(GL_PROJECTION);
+
+	
+
+gluOrtho2D(0.0, 640.0, 0.0, 480.0);
+}
+void setPixel(GLint x, GLint y){
+
+	
+
+glBegin(GL_POINTS);
+
+	
+
+glColor3f(1, 0, 0);
+
+	
+
+glVertex2i(x, y);
+
+	
+
+glEnd();
+
+	
+
+glFlush();
+}
+
+int Round(float a){
+
+
+if (a - int(a) >= 0.5){
+
+
+return int(a) + 1;	
+
+}
+
+else{
+
+
+return int(a);
+
+}
+}
+void render(){	
+
+glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+float x1 = 50, y1 = 50, x2 = 300, y2 = 400;
+
+	
+float dy = y2 - y1;
+
+float dx = x2 - x1;
+
+	
+
+float m = dy / dx;	
+
+glPointSize(10);
+
+
+glBegin(GL_POINTS);
+
+
+glColor3f(0, 0, 1);	
+
+glVertex2i(x1, y1);	
+
+glEnd();	
+
+float x = x1, y = y1;
+
+if (m <= 1){
+
+while (x <= x2){
+x += 1;
+
+y += m;
+	
+
+glPointSize(10);
+
+glBegin(GL_POINTS);
+
+glColor3f(0, 0, 1);
+
+
+glVertex2i(x, y);
+	
+
+glEnd();
+
+	
+
+}
+
+
+}	
+
+else{
+	
+
+while (y <= y2){
+	
+
+y += 1;
+
+	
+x += 1 / m;
+
+	
+
+glPointSize(10);
+
+		
+
+glBegin(GL_POINTS);
+
+	
+
+glColor3f(0, 0, 1);
+
+	
+
+glVertex2i(x, y);
+
+	
+
+glEnd();
+
+	
+
+}
+
+	
+
+}
+
+	
+
+glutSwapBuffers();
+
+	
+
+
+}
+
+void display(){
+
+	
+
+glClear(GL_COLOR_BUFFER_BIT);
+
+	
+
+render();
+
+	
+
+glFlush();
+}
+int main(int argc, char* argv[]){
+
+	
+
+glutInit(&argc, argv);  // Initialize glut
+
+	
+
+//create memory buffers to display
+
+	
+
+glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+
+	
+
+glutInitWindowSize(800, 600); // window size
+
+	
+
+glutCreateWindow("Flag");  // create window
+
+	
+
+glutReshapeFunc(changeView);
+
+	
+
+//glutDisplayFunc(render);
+
+
+glutDisplayFunc(display);//links the display event with the display event handler(display)
+
+
+myinit();
+
+glutIdleFunc(render);
+
+
+GLenum error = glewInit();	
+
+if (GLEW_OK != error){
+
+
+fprintf(stderr, "Glew error");
+	
+
+return 1;
+	
+
+}
+
+glutMainLoop();
+
+	
+
+return 0;
+}
+
+
